@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -9,6 +9,46 @@ function App() {
   const [bananas, setBananas] = useState("cool bananas");
 
   const [readData, setData] = useState({name: "Chalani", otherValue: ""});
+
+  const [pokemonName, setPokemonName] = useState("");
+  const [pokemonImage, setPokemonImage] = useState("");
+
+ 
+
+  useEffect(() => {
+
+    const getPokemonData = async () => {
+      let result = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 1025) + 1}`).then(response => response.json());
+  
+      // let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${Math.floor(Math.random() * 1025) + 1}`);
+      // let data = await response.json();
+  
+      setPokemonName(result.name);
+      setPokemonImage(result.sprites.front_default);
+    }
+
+    console.log("Hello from the start of the component! eg. componentDidMount");
+
+    getPokemonData();
+
+    return(() => {
+      console.log("Component will unmount nom.")
+    })
+  }, []);
+
+  useEffect(() => {
+    console.log(`Retrieves Pokemon data: name: ${pokemonName}, image: ${pokemonImage}`);
+  }, [pokemonName, pokemonImage]);
+
+  // useEffect(callback, dependancyArray);
+
+  useEffect(() => {
+    console.log(`Count is now ${count}`);
+  }, [count]);
+
+  useEffect(() => {
+    console.log(`banana: ${count}, readData: ${JSON.stringify(readData)}`);
+  }, [bananas, readData]);
 
   return (
     <>
